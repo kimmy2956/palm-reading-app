@@ -282,7 +282,7 @@
             } catch (error) {
                 console.error("Error calling Gemini API:", error);
                 statusText.innerText = 'เกิดข้อผิดพลาดในการทำนาย. โปรดลองใหม่อีกครั้ง';
-                alert('เกิดข้อผิดพลาด: โปรดตรวจสอบคีย์ API หรือลองอีกครั้งในภายหลัง');
+                alert('เกิดข้อผิดพลาด: โปรดตรวจสอบคีย์ API ของคุณหรือลองอีกครั้งในภายหลัง');
             } finally {
                 analyzeBtn.disabled = false;
                 analyzeBtn.innerText = 'วิเคราะห์เส้นลายมือ';
