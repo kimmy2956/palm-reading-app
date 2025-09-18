@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ทำนายลายมือ by คุณแอปเปิ้ล</title>
+  <style>
+    /* ===== Reset & Base ===== */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Kanit', sans-serif; }
+    body { background:#fffaf0; color:#333; display:flex; flex-direction:column; min-height:100vh; }
+
+    h1,h2,h3 { color:#d2691e; text-align:center; }
+    button { cursor:pointer; transition: 0.3s; }
+    button:hover { transform: scale(1.05); }
+
+    /* ===== Header ===== */
+    header { background: linear-gradient(90deg,#ffb347,#ffcc33); padding:20px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.1); border-bottom-left-radius:20px; border-bottom-right-radius:20px; }
+
+    /* ===== Main ===== */
+    main { flex:1; padding:20px; max-width:700px; margin:0 auto; }
+
+    /* ===== Upload Section ===== */
+    .upload-section { display:flex; flex-direction:column; gap:10px; margin-bottom:30px; text-align:center; }
+    .upload-section input { padding:10px; border-radius:10px; border:1px solid #ccc; }
+    .preview { text-align:center; margin-top:10px; }
+    .preview img { max-width:100%; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+
+    .analyze-btn { padding:12px 25px; background:#ff9800; color:white; font-weight:bold; border:none; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+
+    /* ===== Result Section ===== */
+    .result-section { margin-top:20px; display:grid; gap:15px; }
+    .card { background:#fff3e0; padding:15px 20px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+    .card h3 { color:#d84315; margin-bottom:8px; }
+    .card p { font-size:0.95rem; line-height:1.5; }
+
+    .highlight { animation: glow 1.5s ease-in-out infinite alternate; font-weight:bold; }
+    @keyframes glow {
+      from { text-shadow: 0 0 5px #ff9800; }
+      to { text-shadow: 0 0 20px #ff5722; }
+    }
+
+    /* ===== Manual Mode ===== */
+    .manual-section { margin-top:30px; text-align:center; }
+    .manual-section select, .manual-section button { padding:12px; margin-top:10px; border-radius:10px; border:1px solid #ccc; }
+    .manual-section button { background:#ff9800; color:white; font-weight:bold; border:none; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+
+    #manualResult { margin-top:15px; background:#fff3e0; padding:15px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); font-size:0.95rem; }
+
+    /* ===== Footer ===== */
+    footer { text-align:center; padding:15px; background:#ffe0b2; color:#5d4037; border-top-left-radius:20px; border-top-right-radius:20px; margin-top:30px; }
+
+    /* ===== Responsive ===== */
+    @media(max-width:700px){
+      main { padding:15px; }
+      .card p, #manualResult { font-size:0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ทำนายลายมือ</h1>
+    <p>วิเคราะห์เส้นชีวิต เส้นสมอง เส้นหัวใจ และเส้นวาสนา พร้อมคำแนะนำเชิงบวก</p>
+  </header>
+
+  <main>
+    <!-- Upload Section -->
+    <section class="upload-section">
+      <h2>อัปโหลดหรือถ่ายรูปฝ่ามือ</h2>
+      <input type="file" id="palmInput" accept="image/*">
+      <div class="preview" id="preview"></div>
+      <button class="analyze-btn" onclick="analyzePalmAI()">วิเคราะห์เส้นลายมือ</button>
+    </section>
+
+    <!-- Result Section -->
+    <section class="result-section" id="resultSection" style="display:none;">
+      <div class="card" id="lifeCard"><h3>เส้นชีวิต</h3><p id="lifeLine"></p></div>
+      <div class="card" id="headCard"><h3>เส้นสมอง</h3><p id="headLine"></p></div>
+      <div class="card" id="heartCard"><h3>เส้นหัวใจ</h3><p id="heartLine"></p></div>
+      <div class="card" id="fateCard"><h3>เส้นวาสนา</h3><p id="fateLine"></p></div>
+    </section>
+
+    <!-- Manual Mode -->
+    <section class="manual-section">
+      <h2>โหมดเลือกอ่านเอง</h2>
+      <select id="manualSelect">
+        <option value="">-- เลือกเส้นมือ --</option>
+        <option value="life">เส้นชีวิต</option>
+        <option value="head">เส้นสมอง</option>
+        <option value="heart">เส้นหัวใจ</option>
+        <option value="fate">เส้นวาสนา</option>
+      </select>
+      <button onclick="manualRead()">อ่านเส้นที่เลือก</button>
+      <div id="manualResult"></div>
+    </section>
+  </main>
+
+  <footer>
+    พัฒนาโดย ธันยรัศมิ์ ประภาจิรสกุล
+  </footer>
+
+  <script>
+    const preview = document.getElementById('preview');
+    const palmInput = document.getElementById('palmInput');
+
+    // Preview uploaded image
+    palmInput.addEventListener('change', function(e){
+      const file = e.target.files[0];
+      if(file){
+        const reader = new FileReader();
+        reader.onload = function(evt){
+          preview.innerHTML = `<img src="${evt.target.result}" alt="Palm Image">`;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // ===== AI Mock Function with Life Advice =====
+    function analyzePalmAI(){
+      if(!palmInput.files[0]){
+        alert('กรุณาอัปโหลดรูปฝ่ามือก่อน');
+        return;
+      }
+
+      document.getElementById('resultSection').style.display = 'grid';
+
+      // Mock AI ผลลัพธ์ + คำแนะนำเชิงบวก
+      const lifeLineResult = "คุณมีสุขภาพแข็งแรง พลังชีวิตสูง แนะนำให้ดูแลการพักผ่อนและออกกำลังกายสม่ำเสมอ เพื่อรักษาพลังบวกในชีวิตประจำวัน";
+      const headLineResult = "คุณมีความคิดรอบคอบและการตัดสินใจดี แนะนำให้ตั้งเป้าหมายชัดเจน และวางแผนการทำงานอย่างเป็นขั้นตอนเพื่อประสิทธิภาพสูงสุด";
+      const heartLineResult = "คุณมีความรักมั่นคงและสัมพันธ์ราบรื่น แนะนำให้สื่อสารความรู้สึกกับคนใกล้ชิดและใช้เวลาใกล้ชิดกับครอบครัวและคนรัก";
+      const fateLineResult = "คุณมีเส้นวาสนาและการงานที่มั่นคง แนะนำให้ขยันและรักษาความซื่อสัตย์ พร้อมเปิดใจเรียนรู้สิ่งใหม่ ๆ เพื่อความก้าวหน้า";
+
+      document.getElementById('lifeLine').innerText = lifeLineResult;
+      document.getElementById('headLine').innerText = headLineResult;
+      document.getElementById('heartLine').innerText = heartLineResult;
+      document.getElementById('fateLine').innerText = fateLineResult;
+    }
+
+    // Manual Mode
+    function manualRead(){
+      const choice = document.getElementById('manualSelect').value;
+      const manualResult = document.getElementById('manualResult');
+
+      const readings = {
+        life: "เส้นชีวิต: สุขภาพแข็งแรง พลังชีวิตสูง แนะนำให้ออกกำลังกายสม่ำเสมอและพักผ่อนให้เพียงพอ",
+        head: "เส้นสมอง: การคิดรอบคอบและการตัดสินใจดี แนะนำให้วางแผนอย่างเป็นขั้นตอนและตั้งเป้าหมายชัดเจน",
+        heart: "เส้นหัวใจ: ความรักมั่นคง แนะนำให้สื่อสารความรู้สึกกับคนรักและครอบครัว ใช้เวลาคุณภาพด้วยกัน",
+        fate: "เส้นวาสนา: การงานมั่นคง โชคชะตาดี แนะนำให้ขยันและรักษาความซื่อสัตย์ พร้อมเปิดใจเรียนรู้สิ่งใหม่ ๆ"
+      };
+
+      if(choice && readings[choice]){
+        manualResult.innerText = readings[choice];
+      } else {
+        manualResult.innerText = 'กรุณาเลือกเส้นมือที่ต้องการอ่าน';
+      }
+    }
+  </script>
+</body>
+</html>
