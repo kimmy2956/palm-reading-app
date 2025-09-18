@@ -83,16 +83,21 @@
             border-radius:10px; 
             box-shadow:0 4px 8px rgba(0,0,0,0.2); 
             font-size: 1.1em;
+            width: 100%;
         }
-
+        
+        .analyze-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        
         .notice-text { 
             color: #d84315; 
             margin-top: 10px; 
             font-weight: bold; 
             font-size: 0.9em;
         }
-
-        /* ===== Result Section ===== */
+        
         .result-section { 
             margin-top:20px; 
             display:none; 
@@ -159,7 +164,7 @@
         <section class="upload-section">
             <h2>อัปโหลดรูปฝ่ามือ</h2>
             <p class="notice-text">
-                **หมายเหตุ:** โปรแกรมนี้ใช้เพื่อความบันเทิงเท่านั้น ผลลัพธ์ที่แสดงจะถูกสุ่มขึ้นมาใหม่ทุกครั้ง.
+                **หมายเหตุ:** โปรแกรมนี้ใช้เพื่อความบันเทิงเท่านั้น.
             </p>
             <input type="file" id="palmInput" accept="image/*">
             <div class="preview" id="preview">
@@ -180,50 +185,39 @@
         พัฒนาโดย ธันยรัศมิ์ ประภาจิรสกุล
     </footer>
 
-    <script>
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.14.1/dist/index.js";
+
+        // IMPORTANT: Replace with your actual API key
+        // **Warning: This key is exposed in the front-end. For production, use a secure back-end.**
+        const API_KEY = "YOUR_API_KEY"; // **แทนที่ด้วยคีย์จริงของคุณ**
+        const genAI = new GoogleGenerativeAI(API_KEY);
+
         const palmInput = document.getElementById('palmInput');
         const preview = document.getElementById('preview');
         const resultSection = document.getElementById('resultSection');
         const analyzeBtn = document.querySelector('.analyze-btn');
 
-        const readings = {
-            life: [
-                "เส้นชีวิตของคุณยาวและชัดเจน บ่งบอกถึงสุขภาพที่แข็งแรงและความมั่นคงในชีวิต.",
-                "ชีวิตของคุณเต็มไปด้วยพลังงานและความกระตือรือร้น ควรใช้ชีวิตให้เต็มที่.",
-                "คุณเป็นคนอดทนและมีพละกำลังมาก ควรนำความสามารถนี้ไปใช้ให้เป็นประโยชน์.",
-                "มีเกณฑ์ที่จะเดินทางไกลและได้พบประสบการณ์ใหม่ ๆ ที่น่าตื่นเต้นในชีวิต."
-            ],
-            head: [
-                "คุณมีสติปัญญาเฉียบแหลมและมีความคิดสร้างสรรค์สูง เหมาะกับงานที่ต้องใช้สมอง.",
-                "การตัดสินใจของคุณรอบคอบและมีเหตุผล ทำให้ไม่ค่อยผิดพลาดในการดำเนินชีวิต.",
-                "คุณเป็นคนใฝ่รู้และเปิดกว้างต่อสิ่งใหม่ ๆ อยู่เสมอ ซึ่งจะนำพาความสำเร็จมาให้.",
-                "มีศักยภาพในการเป็นผู้นำและแก้ไขปัญหาได้อย่างยอดเยี่ยม."
-            ],
-            heart: [
-                "คุณมีความรักที่มั่นคงและจริงใจ เป็นที่รักของคนรอบข้าง.",
-                "คุณเป็นคนอ่อนโยนและเห็นอกเห็นใจผู้อื่น ควรใช้คุณสมบัตินี้เพื่อสร้างความสัมพันธ์ที่ดี.",
-                "ชีวิตรักของคุณราบรื่นและเปี่ยมด้วยความสุข ควรใช้เวลาที่มีคุณภาพร่วมกับคนรัก.",
-                "ความรักคือแรงผลักดันที่สำคัญในชีวิตของคุณ ควรให้ความสำคัญกับมัน."
-            ],
-            fate: [
-                "คุณมีวาสนาในหน้าที่การงานและจะประสบความสำเร็จจากความขยัน.",
-                "โชคชะตาของคุณจะดีขึ้นเรื่อย ๆ ควรใช้ความพยายามอย่างต่อเนื่อง.",
-                "มีโอกาสดี ๆ เข้ามาในชีวิตอย่างไม่คาดฝัน ควรพร้อมที่จะคว้าโอกาสนั้นไว้.",
-                "การงานของคุณจะมั่นคงและเติบโตอย่างต่อเนื่อง."
-            ]
-        };
-
-        function getRandomReading(readings) {
-            const randomIndex = Math.floor(Math.random() * readings.length);
-            return readings[randomIndex];
-        }
-
         let uploadedFile = null;
+
+        // Function to convert a File object to a Generative Part for the API
+        async function fileToGenerativePart(file) {
+            const base64EncodedData = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(file);
+            });
+            return {
+                inlineData: {
+                    data: base64EncodedData,
+                    mimeType: file.type,
+                },
+            };
+        }
 
         palmInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // Check if the file is an image
                 if (!file.type.startsWith('image/')) {
                     alert('กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น');
                     e.target.value = '';
@@ -242,42 +236,79 @@
                 uploadedFile = null;
                 preview.innerHTML = `<p style="color:#aaa;">รอรูปภาพ...</p>`;
             }
+            // Hide previous results when a new file is uploaded
+            resultSection.classList.remove('show');
         });
 
-        analyzeBtn.addEventListener('click', function() {
+        analyzeBtn.addEventListener('click', async function() {
             if (!uploadedFile) {
                 alert('กรุณาอัปโหลดรูปภาพก่อน');
                 return;
             }
 
-            // Simple validation to prevent prediction on non-image files or corrupted images.
-            // It checks if the image has a width/height, which most valid images do.
-            const img = new Image();
-            img.src = URL.createObjectURL(uploadedFile);
-            img.onload = function() {
-                // If the image is not a valid image (e.g., a text file with a .jpg extension)
-                // this onload event might not fire, or width/height will be 0.
-                if (img.width === 0 || img.height === 0) {
-                    alert('รูปภาพที่อัปโหลดไม่ถูกต้อง กรุณาลองใช้รูปภาพอื่น');
-                    resultSection.classList.remove('show');
-                    return;
+            // Show loading state
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerText = 'กำลังวิเคราะห์...';
+            resultSection.classList.remove('show');
+            
+            try {
+                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+                const imagePart = await fileToGenerativePart(uploadedFile);
+                
+                const prompt = `
+                    จากรูปภาพฝ่ามือที่ให้มานี้ ให้คุณทำนายดวงชะตาโดยอิงจากศาสตร์ลายมือ.
+                    ให้วิเคราะห์เส้น 4 เส้นหลัก ได้แก่:
+                    - **เส้นชีวิต**
+                    - **เส้นสมอง**
+                    - **เส้นหัวใจ**
+                    - **เส้นวาสนา**
+
+                    สำหรับแต่ละเส้น ให้เขียนคำทำนายในเชิงบวกและให้กำลังใจความยาวประมาณ 1-2 ย่อหน้า
+                    ห้ามทำนายข้อมูลส่วนตัวอื่น ๆ นอกเหนือจากที่ร้องขอ.
+                    ให้คำตอบทั้งหมดเป็นภาษาไทยเท่านั้น โดยแต่ละส่วนจะต้องขึ้นบรรทัดใหม่ตามหัวข้อที่กำหนด
+                `;
+                
+                const result = await model.generateContent([prompt, imagePart]);
+                const responseText = await result.response.text();
+                
+                // Use a more robust method to parse the response text from the API
+                const lines = responseText.split('**').filter(Boolean); // Split by bold markdown
+                
+                let lifeLineText = 'ไม่พบการวิเคราะห์เส้นชีวิต';
+                let headLineText = 'ไม่พบการวิเคราะห์เส้นสมอง';
+                let heartLineText = 'ไม่พบการวิเคราะห์เส้นหัวใจ';
+                let fateLineText = 'ไม่พบการวิเคราะห์เส้นวาสนา';
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const section = lines[i].trim();
+                    if (section === 'เส้นชีวิต' && lines[i + 1]) {
+                        lifeLineText = lines[i + 1].trim();
+                    } else if (section === 'เส้นสมอง' && lines[i + 1]) {
+                        headLineText = lines[i + 1].trim();
+                    } else if (section === 'เส้นหัวใจ' && lines[i + 1]) {
+                        heartLineText = lines[i + 1].trim();
+                    } else if (section === 'เส้นวาสนา' && lines[i + 1]) {
+                        fateLineText = lines[i + 1].trim();
+                    }
                 }
-                
-                // If validation passes, proceed with displaying the results
-                resultSection.classList.remove('show');
-                
+
+                document.getElementById('lifeLine').innerText = lifeLineText;
+                document.getElementById('headLine').innerText = headLineText;
+                document.getElementById('heartLine').innerText = heartLineText;
+                document.getElementById('fateLine').innerText = fateLineText;
+
+                // Animate the result section to show
                 setTimeout(() => {
                     resultSection.classList.add('show');
-                    document.getElementById('lifeLine').innerText = getRandomReading(readings.life);
-                    document.getElementById('headLine').innerText = getRandomReading(readings.head);
-                    document.getElementById('heartLine').innerText = getRandomReading(readings.heart);
-                    document.getElementById('fateLine').innerText = getRandomReading(readings.fate);
-                }, 500);
-            };
-            img.onerror = function() {
-                alert('ไฟล์รูปภาพเสียหายหรือไม่สามารถอ่านได้ กรุณาใช้รูปภาพอื่น');
-                resultSection.classList.remove('show');
-            };
+                }, 100);
+
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                alert('เกิดข้อผิดพลาดในการทำนาย กรุณาลองใหม่อีกครั้ง');
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerText = 'วิเคราะห์เส้นลายมือ';
+            }
         });
     </script>
 </body>
