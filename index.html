@@ -1,264 +1,278 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ทำนายลายมือ</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    /* ===== Reset & Base ===== */
-    * { margin:0; padding:0; box-sizing:border-box; font-family:'Kanit', sans-serif; }
-    body { background:#f5f5dc; color:#333; display:flex; flex-direction:column; min-height:100vh; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ทำนายลายมือ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== Reset & Base ===== */
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Kanit', sans-serif; }
+        body { background:#f5f5dc; color:#333; display:flex; flex-direction:column; min-height:100vh; }
 
-    h1,h2,h3 { color:#d2691e; text-align:center; }
-    button { cursor:pointer; transition: 0.3s; }
-    button:hover { transform: scale(1.05); }
+        h1,h2,h3 { color:#d2691e; text-align:center; }
+        button { cursor:pointer; transition: 0.3s; }
+        button:hover { transform: scale(1.05); }
 
-    /* ===== Header ===== */
-    header { 
-      background: linear-gradient(90deg, #ffb347, #ffcc33); 
-      padding:20px; 
-      text-align:center; 
-      box-shadow:0 4px 10px rgba(0,0,0,0.1); 
-      border-bottom-left-radius:20px; 
-      border-bottom-right-radius:20px; 
-    }
+        /* ===== Header ===== */
+        header { 
+            background: linear-gradient(90deg, #ffb347, #ffcc33); 
+            padding:20px; 
+            text-align:center; 
+            box-shadow:0 4px 10px rgba(0,0,0,0.1); 
+            border-bottom-left-radius:20px; 
+            border-bottom-right-radius:20px; 
+        }
 
-    /* ===== Main ===== */
-    main { 
-      flex:1; 
-      padding:20px; 
-      max-width:700px; 
-      margin:0 auto; 
-    }
+        /* ===== Main ===== */
+        main { 
+            flex:1; 
+            padding:20px; 
+            max-width:700px; 
+            margin:0 auto; 
+        }
 
-    /* ===== Upload Section ===== */
-    .upload-section { 
-      display:flex; 
-      flex-direction:column; 
-      gap:10px; 
-      margin-bottom:30px; 
-      text-align:center; 
-      background: #fff3e0;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
+        /* ===== Upload Section ===== */
+        .upload-section { 
+            display:flex; 
+            flex-direction:column; 
+            gap:10px; 
+            margin-bottom:30px; 
+            text-align:center; 
+            background: #fff3e0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
 
-    .upload-section input { 
-      padding:12px; 
-      border-radius:10px; 
-      border:1px solid #ccc; 
-      background: #ffffff;
-    }
+        .upload-section input { 
+            padding:12px; 
+            border-radius:10px; 
+            border:1px solid #ccc; 
+            background: #ffffff;
+        }
 
-    .preview { 
-      text-align:center; 
-      margin-top:10px; 
-      height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fafafa;
-      border-radius: 10px;
-      border: 2px dashed #ffcc33;
-      overflow: hidden;
-    }
+        .preview { 
+            text-align:center; 
+            margin-top:10px; 
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fafafa;
+            border-radius: 10px;
+            border: 2px dashed #ffcc33;
+            overflow: hidden;
+        }
 
-    .preview img { 
-      max-width:100%; 
-      max-height:100%;
-      border-radius:15px; 
-      box-shadow:0 5px 15px rgba(0,0,0,0.2); 
-    }
+        .preview img { 
+            max-width:100%; 
+            max-height:100%;
+            border-radius:15px; 
+            box-shadow:0 5px 15px rgba(0,0,0,0.2); 
+        }
 
-    .analyze-btn { 
-      padding:12px 25px; 
-      background:#ff9800; 
-      color:white; 
-      font-weight:bold; 
-      border:none; 
-      border-radius:10px; 
-      box-shadow:0 4px 8px rgba(0,0,0,0.2); 
-      font-size: 1.1em;
-    }
+        .analyze-btn { 
+            padding:12px 25px; 
+            background:#ff9800; 
+            color:white; 
+            font-weight:bold; 
+            border:none; 
+            border-radius:10px; 
+            box-shadow:0 4px 8px rgba(0,0,0,0.2); 
+            font-size: 1.1em;
+        }
 
-    .notice-text { 
-      color: #d84315; 
-      margin-top: 10px; 
-      font-weight: bold; 
-      font-size: 0.9em;
-    }
+        .notice-text { 
+            color: #d84315; 
+            margin-top: 10px; 
+            font-weight: bold; 
+            font-size: 0.9em;
+        }
 
-    /* ===== Result Section ===== */
-    .result-section { 
-      margin-top:20px; 
-      display:none; 
-      gap:15px; 
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    }
+        /* ===== Result Section ===== */
+        .result-section { 
+            margin-top:20px; 
+            display:none; 
+            grid-template-columns: 1fr;
+            gap:15px; 
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+        }
+        @media (min-width: 600px) {
+            .result-section {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
 
-    .result-section.show {
-      display: grid;
-      opacity: 1;
-      transform: translateY(0);
-    }
+        .result-section.show {
+            display: grid;
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-    .card { 
-      background:#fff3e0; 
-      padding:15px 20px; 
-      border-radius:15px; 
-      box-shadow:0 4px 10px rgba(0,0,0,0.1); 
-    }
+        .card { 
+            background:#fff3e0; 
+            padding:15px 20px; 
+            border-radius:15px; 
+            box-shadow:0 4px 10px rgba(0,0,0,0.1); 
+        }
 
-    .card h3 { 
-      color:#d84315; 
-      margin-bottom:8px; 
-    }
+        .card h3 { 
+            color:#d84315; 
+            margin-bottom:8px; 
+        }
 
-    .card p { 
-      font-size:0.95rem; 
-      line-height:1.5; 
-    }
+        .card p { 
+            font-size:0.95rem; 
+            line-height:1.5; 
+        }
 
-    /* ===== Footer ===== */
-    footer { 
-      text-align:center; 
-      padding:15px; 
-      background:#ffe0b2; 
-      color:#5d4037; 
-      border-top-left-radius:20px; 
-      border-top-right-radius:20px; 
-      margin-top:30px; 
-    }
+        /* ===== Footer ===== */
+        footer { 
+            text-align:center; 
+            padding:15px; 
+            background:#ffe0b2; 
+            color:#5d4037; 
+            border-top-left-radius:20px; 
+            border-top-right-radius:20px; 
+            margin-top:30px; 
+        }
 
-    /* ===== Responsive ===== */
-    @media(max-width:700px){
-      main { padding:15px; }
-      .card p { font-size:0.9rem; }
-    }
-  </style>
+        /* ===== Responsive ===== */
+        @media(max-width:700px){
+            main { padding:15px; }
+            .card p { font-size:0.9rem; }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>ทำนายลายมือ</h1>
-    <p>วิเคราะห์เส้นชีวิต เส้นสมอง เส้นหัวใจ และเส้นวาสนา พร้อมคำแนะนำเชิงบวก</p>
-  </header>
+    <header>
+        <h1>ทำนายลายมือ</h1>
+        <p>วิเคราะห์เส้นชีวิต เส้นสมอง เส้นหัวใจ และเส้นวาสนา พร้อมคำแนะนำเชิงบวก</p>
+    </header>
 
-  <main>
-    <section class="upload-section">
-      <h2>อัปโหลดรูปฝ่ามือ</h2>
-      <p class="notice-text">
-        **หมายเหตุ:** โปรแกรมนี้ใช้เพื่อความบันเทิงเท่านั้น ผลลัพธ์ที่แสดงจะถูกสุ่มขึ้นมาใหม่ทุกครั้ง.
-      </p>
-      <input type="file" id="palmInput" accept="image/*">
-      <div class="preview" id="preview">
-        <p style="color:#aaa;">รอรูปภาพ...</p>
-      </div>
-      <button class="analyze-btn" onclick="analyzePalmAI()">วิเคราะห์เส้นลายมือ</button>
-    </section>
+    <main>
+        <section class="upload-section">
+            <h2>อัปโหลดรูปฝ่ามือ</h2>
+            <p class="notice-text">
+                **หมายเหตุ:** โปรแกรมนี้ใช้เพื่อความบันเทิงเท่านั้น ผลลัพธ์ที่แสดงจะถูกสุ่มขึ้นมาใหม่ทุกครั้ง.
+            </p>
+            <input type="file" id="palmInput" accept="image/*">
+            <div class="preview" id="preview">
+                <p style="color:#aaa;">รอรูปภาพ...</p>
+            </div>
+            <button class="analyze-btn">วิเคราะห์เส้นลายมือ</button>
+        </section>
 
-    <section class="result-section" id="resultSection">
-      <div class="card" id="lifeCard"><h3>เส้นชีวิต</h3><p id="lifeLine"></p></div>
-      <div class="card" id="headCard"><h3>เส้นสมอง</h3><p id="headLine"></p></div>
-      <div class="card" id="heartCard"><h3>เส้นหัวใจ</h3><p id="heartLine"></p></div>
-      <div class="card" id="fateCard"><h3>เส้นวาสนา</h3><p id="fateLine"></p></div>
-    </section>
-  </main>
+        <section class="result-section" id="resultSection">
+            <div class="card" id="lifeCard"><h3>เส้นชีวิต</h3><p id="lifeLine"></p></div>
+            <div class="card" id="headCard"><h3>เส้นสมอง</h3><p id="headLine"></p></div>
+            <div class="card" id="heartCard"><h3>เส้นหัวใจ</h3><p id="heartLine"></p></div>
+            <div class="card" id="fateCard"><h3>เส้นวาสนา</h3><p id="fateLine"></p></div>
+        </section>
+    </main>
 
-  <footer>
-    พัฒนาโดย ธันยรัศมิ์ ประภาจิรสกุล
-  </footer>
+    <footer>
+        พัฒนาโดย ธันยรัศมิ์ ประภาจิรสกุล
+    </footer>
 
-  <script>
-    const palmInput = document.getElementById('palmInput');
-    const preview = document.getElementById('preview');
-    const resultSection = document.getElementById('resultSection');
+    <script>
+        const palmInput = document.getElementById('palmInput');
+        const preview = document.getElementById('preview');
+        const resultSection = document.getElementById('resultSection');
+        const analyzeBtn = document.querySelector('.analyze-btn');
 
-    const readings = {
-      life: [
-        "เส้นชีวิตของคุณยาวและชัดเจน บ่งบอกถึงสุขภาพที่แข็งแรงและความมั่นคงในชีวิต.",
-        "ชีวิตของคุณเต็มไปด้วยพลังงานและความกระตือรือร้น ควรใช้ชีวิตให้เต็มที่.",
-        "คุณเป็นคนอดทนและมีพละกำลังมาก ควรนำความสามารถนี้ไปใช้ให้เป็นประโยชน์.",
-        "มีเกณฑ์ที่จะเดินทางไกลและได้พบประสบการณ์ใหม่ ๆ ที่น่าตื่นเต้นในชีวิต."
-      ],
-      head: [
-        "คุณมีสติปัญญาเฉียบแหลมและมีความคิดสร้างสรรค์สูง เหมาะกับงานที่ต้องใช้สมอง.",
-        "การตัดสินใจของคุณรอบคอบและมีเหตุผล ทำให้ไม่ค่อยผิดพลาดในการดำเนินชีวิต.",
-        "คุณเป็นคนใฝ่รู้และเปิดกว้างต่อสิ่งใหม่ ๆ อยู่เสมอ ซึ่งจะนำพาความสำเร็จมาให้.",
-        "มีศักยภาพในการเป็นผู้นำและแก้ไขปัญหาได้อย่างยอดเยี่ยม."
-      ],
-      heart: [
-        "คุณมีความรักที่มั่นคงและจริงใจ เป็นที่รักของคนรอบข้าง.",
-        "คุณเป็นคนอ่อนโยนและเห็นอกเห็นใจผู้อื่น ควรใช้คุณสมบัตินี้เพื่อสร้างความสัมพันธ์ที่ดี.",
-        "ชีวิตรักของคุณราบรื่นและเปี่ยมด้วยความสุข ควรใช้เวลาที่มีคุณภาพร่วมกับคนรัก.",
-        "ความรักคือแรงผลักดันที่สำคัญในชีวิตของคุณ ควรให้ความสำคัญกับมัน."
-      ],
-      fate: [
-        "คุณมีวาสนาในหน้าที่การงานและจะประสบความสำเร็จจากความขยัน.",
-        "โชคชะตาของคุณจะดีขึ้นเรื่อย ๆ ควรใช้ความพยายามอย่างต่อเนื่อง.",
-        "มีโอกาสดี ๆ เข้ามาในชีวิตอย่างไม่คาดฝัน ควรพร้อมที่จะคว้าโอกาสนั้นไว้.",
-        "การงานของคุณจะมั่นคงและเติบโตอย่างต่อเนื่อง."
-      ]
-    };
+        const readings = {
+            life: [
+                "เส้นชีวิตของคุณยาวและชัดเจน บ่งบอกถึงสุขภาพที่แข็งแรงและความมั่นคงในชีวิต.",
+                "ชีวิตของคุณเต็มไปด้วยพลังงานและความกระตือรือร้น ควรใช้ชีวิตให้เต็มที่.",
+                "คุณเป็นคนอดทนและมีพละกำลังมาก ควรนำความสามารถนี้ไปใช้ให้เป็นประโยชน์.",
+                "มีเกณฑ์ที่จะเดินทางไกลและได้พบประสบการณ์ใหม่ ๆ ที่น่าตื่นเต้นในชีวิต."
+            ],
+            head: [
+                "คุณมีสติปัญญาเฉียบแหลมและมีความคิดสร้างสรรค์สูง เหมาะกับงานที่ต้องใช้สมอง.",
+                "การตัดสินใจของคุณรอบคอบและมีเหตุผล ทำให้ไม่ค่อยผิดพลาดในการดำเนินชีวิต.",
+                "คุณเป็นคนใฝ่รู้และเปิดกว้างต่อสิ่งใหม่ ๆ อยู่เสมอ ซึ่งจะนำพาความสำเร็จมาให้.",
+                "มีศักยภาพในการเป็นผู้นำและแก้ไขปัญหาได้อย่างยอดเยี่ยม."
+            ],
+            heart: [
+                "คุณมีความรักที่มั่นคงและจริงใจ เป็นที่รักของคนรอบข้าง.",
+                "คุณเป็นคนอ่อนโยนและเห็นอกเห็นใจผู้อื่น ควรใช้คุณสมบัตินี้เพื่อสร้างความสัมพันธ์ที่ดี.",
+                "ชีวิตรักของคุณราบรื่นและเปี่ยมด้วยความสุข ควรใช้เวลาที่มีคุณภาพร่วมกับคนรัก.",
+                "ความรักคือแรงผลักดันที่สำคัญในชีวิตของคุณ ควรให้ความสำคัญกับมัน."
+            ],
+            fate: [
+                "คุณมีวาสนาในหน้าที่การงานและจะประสบความสำเร็จจากความขยัน.",
+                "โชคชะตาของคุณจะดีขึ้นเรื่อย ๆ ควรใช้ความพยายามอย่างต่อเนื่อง.",
+                "มีโอกาสดี ๆ เข้ามาในชีวิตอย่างไม่คาดฝัน ควรพร้อมที่จะคว้าโอกาสนั้นไว้.",
+                "การงานของคุณจะมั่นคงและเติบโตอย่างต่อเนื่อง."
+            ]
+        };
 
-    function getRandomReading(readings) {
-      const randomIndex = Math.floor(Math.random() * readings.length);
-      return readings[randomIndex];
-    }
-
-    // New variable to store the file and validate it
-    let uploadedFile = null;
-
-    palmInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file) {
-        uploadedFile = file;
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          preview.innerHTML = `<img src="${evt.target.result}" alt="Uploaded Image">`;
+        function getRandomReading(readings) {
+            const randomIndex = Math.floor(Math.random() * readings.length);
+            return readings[randomIndex];
         }
-        reader.readAsDataURL(file);
-      } else {
-        uploadedFile = null;
-        preview.innerHTML = `<p style="color:#aaa;">รอรูปภาพ...</p>`;
-      }
-    });
 
-    function analyzePalmAI() {
-      if (!uploadedFile) {
-        alert('กรุณาอัปโหลดรูปภาพก่อน');
-        return;
-      }
-      
-      // A simple validation: check the filename for 'palm' or 'hand' (conceptual)
-      // This is a placeholder for a real AI check, but it simulates user-friendliness.
-      const fileName = uploadedFile.name.toLowerCase();
-      if (!fileName.includes('palm') && !fileName.includes('hand') && uploadedFile.type.startsWith('image/')) {
-        alert('โปรดอัปโหลดรูปภาพฝ่ามือเท่านั้น');
-        resultSection.classList.remove('show');
-        return; 
-      }
+        let uploadedFile = null;
 
-      // Hide the result section before showing new content
-      resultSection.classList.remove('show');
-      
-      // Use a small delay to allow the CSS animation to hide the content before showing new content
-      setTimeout(() => {
-        // Show the result section with animation
-        resultSection.classList.add('show');
+        palmInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // ตรวจสอบว่าเป็นไฟล์รูปภาพหรือไม่
+                if (!file.type.startsWith('image/')) {
+                    alert('กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น');
+                    e.target.value = ''; // ล้างค่าใน input
+                    uploadedFile = null;
+                    preview.innerHTML = `<p style="color:#aaa;">รอรูปภาพ...</p>`;
+                    return;
+                }
 
-        // Display a random reading
-        document.getElementById('lifeLine').innerText = getRandomReading(readings.life);
-        document.getElementById('headLine').innerText = getRandomReading(readings.head);
-        document.getElementById('heartLine').innerText = getRandomReading(readings.heart);
-        document.getElementById('fateLine').innerText = getRandomReading(readings.fate);
-      }, 500); // 500ms delay
-    }
-  </script>
+                uploadedFile = file;
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    preview.innerHTML = `<img src="${evt.target.result}" alt="Uploaded Image">`;
+                }
+                reader.readAsDataURL(file);
+            } else {
+                uploadedFile = null;
+                preview.innerHTML = `<p style="color:#aaa;">รอรูปภาพ...</p>`;
+            }
+        });
+
+        analyzeBtn.addEventListener('click', function() {
+            if (!uploadedFile) {
+                alert('กรุณาอัปโหลดรูปภาพก่อน');
+                return;
+            }
+
+            // A simple validation: check the image size (heuristic)
+            const img = new Image();
+            img.src = URL.createObjectURL(uploadedFile);
+            img.onload = function() {
+                // Check if the image dimensions are too small, which might indicate it's not a proper palm image
+                if (img.width < 100 || img.height < 100) {
+                    alert('รูปภาพที่อัปโหลดอาจไม่ใช่รูปฝ่ามือ กรุณาลองอัปโหลดรูปภาพที่ชัดเจนและมีขนาดใหญ่ขึ้น');
+                    resultSection.classList.remove('show');
+                    return;
+                }
+                
+                // Proceed with displaying the results
+                resultSection.classList.remove('show');
+                
+                setTimeout(() => {
+                    resultSection.classList.add('show');
+                    document.getElementById('lifeLine').innerText = getRandomReading(readings.life);
+                    document.getElementById('headLine').innerText = getRandomReading(readings.head);
+                    document.getElementById('heartLine').innerText = getRandomReading(readings.heart);
+                    document.getElementById('fateLine').innerText = getRandomReading(readings.fate);
+                }, 500);
+            }
+        });
+    </script>
 </body>
 </html>
