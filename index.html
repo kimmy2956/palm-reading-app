@@ -8,15 +8,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== Reset & Base ===== */
+        /* CSS styles remain the same as before */
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Kanit', sans-serif; }
         body { background:#f5f5dc; color:#333; display:flex; flex-direction:column; min-height:100vh; }
-
         h1,h2,h3 { color:#d2691e; text-align:center; }
         button { cursor:pointer; transition: 0.3s; }
         button:hover { transform: scale(1.05); }
-
-        /* ===== Header ===== */
         header { 
             background: linear-gradient(90deg, #ffb347, #ffcc33); 
             padding:20px; 
@@ -25,16 +22,12 @@
             border-bottom-left-radius:20px; 
             border-bottom-right-radius:20px; 
         }
-
-        /* ===== Main ===== */
         main { 
             flex:1; 
             padding:20px; 
             max-width:700px; 
             margin:0 auto; 
         }
-
-        /* ===== Upload Section ===== */
         .upload-section { 
             display:flex; 
             flex-direction:column; 
@@ -46,14 +39,12 @@
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
         .upload-section input { 
             padding:12px; 
             border-radius:10px; 
             border:1px solid #ccc; 
             background: #ffffff;
         }
-
         .preview { 
             text-align:center; 
             margin-top:10px; 
@@ -66,14 +57,12 @@
             border: 2px dashed #ffcc33;
             overflow: hidden;
         }
-
         .preview img { 
             max-width:100%; 
             max-height:100%;
             border-radius:15px; 
             box-shadow:0 5px 15px rgba(0,0,0,0.2); 
         }
-
         .analyze-btn { 
             padding:12px 25px; 
             background:#ff9800; 
@@ -84,15 +73,12 @@
             box-shadow:0 4px 8px rgba(0,0,0,0.2); 
             font-size: 1.1em;
         }
-
         .notice-text { 
             color: #d84315; 
             margin-top: 10px; 
             font-weight: bold; 
             font-size: 0.9em;
         }
-
-        /* ===== Result Section ===== */
         .result-section { 
             margin-top:20px; 
             display:none; 
@@ -107,31 +93,25 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
-
         .result-section.show {
             display: grid;
             opacity: 1;
             transform: translateY(0);
         }
-
         .card { 
             background:#fff3e0; 
             padding:15px 20px; 
             border-radius:15px; 
             box-shadow:0 4px 10px rgba(0,0,0,0.1); 
         }
-
         .card h3 { 
             color:#d84315; 
             margin-bottom:8px; 
         }
-
         .card p { 
             font-size:0.95rem; 
             line-height:1.5; 
         }
-
-        /* ===== Footer ===== */
         footer { 
             text-align:center; 
             padding:15px; 
@@ -141,8 +121,6 @@
             border-top-right-radius:20px; 
             margin-top:30px; 
         }
-
-        /* ===== Responsive ===== */
         @media(max-width:700px){
             main { padding:15px; }
             .card p { font-size:0.9rem; }
@@ -154,7 +132,6 @@
         <h1>ทำนายลายมือ</h1>
         <p>วิเคราะห์เส้นชีวิต เส้นสมอง เส้นหัวใจ และเส้นวาสนา พร้อมคำแนะนำเชิงบวก</p>
     </header>
-
     <main>
         <section class="upload-section">
             <h2>อัปโหลดรูปฝ่ามือ</h2>
@@ -167,7 +144,6 @@
             </div>
             <button class="analyze-btn">วิเคราะห์เส้นลายมือ</button>
         </section>
-
         <section class="result-section" id="resultSection">
             <div class="card" id="lifeCard"><h3>เส้นชีวิต</h3><p id="lifeLine"></p></div>
             <div class="card" id="headCard"><h3>เส้นสมอง</h3><p id="headLine"></p></div>
@@ -175,11 +151,9 @@
             <div class="card" id="fateCard"><h3>เส้นวาสนา</h3><p id="fateLine"></p></div>
         </section>
     </main>
-
     <footer>
         พัฒนาโดย ธันยรัศมิ์ ประภาจิรสกุล
     </footer>
-
     <script>
         const palmInput = document.getElementById('palmInput');
         const preview = document.getElementById('preview');
@@ -187,30 +161,10 @@
         const analyzeBtn = document.querySelector('.analyze-btn');
 
         const readings = {
-            life: [
-                "เส้นชีวิตของคุณยาวและชัดเจน บ่งบอกถึงสุขภาพที่แข็งแรงและความมั่นคงในชีวิต.",
-                "ชีวิตของคุณเต็มไปด้วยพลังงานและความกระตือรือร้น ควรใช้ชีวิตให้เต็มที่.",
-                "คุณเป็นคนอดทนและมีพละกำลังมาก ควรนำความสามารถนี้ไปใช้ให้เป็นประโยชน์.",
-                "มีเกณฑ์ที่จะเดินทางไกลและได้พบประสบการณ์ใหม่ ๆ ที่น่าตื่นเต้นในชีวิต."
-            ],
-            head: [
-                "คุณมีสติปัญญาเฉียบแหลมและมีความคิดสร้างสรรค์สูง เหมาะกับงานที่ต้องใช้สมอง.",
-                "การตัดสินใจของคุณรอบคอบและมีเหตุผล ทำให้ไม่ค่อยผิดพลาดในการดำเนินชีวิต.",
-                "คุณเป็นคนใฝ่รู้และเปิดกว้างต่อสิ่งใหม่ ๆ อยู่เสมอ ซึ่งจะนำพาความสำเร็จมาให้.",
-                "มีศักยภาพในการเป็นผู้นำและแก้ไขปัญหาได้อย่างยอดเยี่ยม."
-            ],
-            heart: [
-                "คุณมีความรักที่มั่นคงและจริงใจ เป็นที่รักของคนรอบข้าง.",
-                "คุณเป็นคนอ่อนโยนและเห็นอกเห็นใจผู้อื่น ควรใช้คุณสมบัตินี้เพื่อสร้างความสัมพันธ์ที่ดี.",
-                "ชีวิตรักของคุณราบรื่นและเปี่ยมด้วยความสุข ควรใช้เวลาที่มีคุณภาพร่วมกับคนรัก.",
-                "ความรักคือแรงผลักดันที่สำคัญในชีวิตของคุณ ควรให้ความสำคัญกับมัน."
-            ],
-            fate: [
-                "คุณมีวาสนาในหน้าที่การงานและจะประสบความสำเร็จจากความขยัน.",
-                "โชคชะตาของคุณจะดีขึ้นเรื่อย ๆ ควรใช้ความพยายามอย่างต่อเนื่อง.",
-                "มีโอกาสดี ๆ เข้ามาในชีวิตอย่างไม่คาดฝัน ควรพร้อมที่จะคว้าโอกาสนั้นไว้.",
-                "การงานของคุณจะมั่นคงและเติบโตอย่างต่อเนื่อง."
-            ]
+            life: ["เส้นชีวิตของคุณยาวและชัดเจน บ่งบอกถึงสุขภาพที่แข็งแรงและความมั่นคงในชีวิต.", "ชีวิตของคุณเต็มไปด้วยพลังงานและความกระตือรือร้น ควรใช้ชีวิตให้เต็มที่.", "คุณเป็นคนอดทนและมีพละกำลังมาก ควรนำความสามารถนี้ไปใช้ให้เป็นประโยชน์.", "มีเกณฑ์ที่จะเดินทางไกลและได้พบประสบการณ์ใหม่ ๆ ที่น่าตื่นเต้นในชีวิต."],
+            head: ["คุณมีสติปัญญาเฉียบแหลมและมีความคิดสร้างสรรค์สูง เหมาะกับงานที่ต้องใช้สมอง.", "การตัดสินใจของคุณรอบคอบและมีเหตุผล ทำให้ไม่ค่อยผิดพลาดในการดำเนินชีวิต.", "คุณเป็นคนใฝ่รู้และเปิดกว้างต่อสิ่งใหม่ ๆ อยู่เสมอ ซึ่งจะนำพาความสำเร็จมาให้.", "มีศักยภาพในการเป็นผู้นำและแก้ไขปัญหาได้อย่างยอดเยี่ยม."],
+            heart: ["คุณมีความรักที่มั่นคงและจริงใจ เป็นที่รักของคนรอบข้าง.", "คุณเป็นคนอ่อนโยนและเห็นอกเห็นใจผู้อื่น ควรใช้คุณสมบัตินี้เพื่อสร้างความสัมพันธ์ที่ดี.", "ชีวิตรักของคุณราบรื่นและเปี่ยมด้วยความสุข ควรใช้เวลาที่มีคุณภาพร่วมกับคนรัก.", "ความรักคือแรงผลักดันที่สำคัญในชีวิตของคุณ ควรให้ความสำคัญกับมัน."],
+            fate: ["คุณมีวาสนาในหน้าที่การงานและจะประสบความสำเร็จจากความขยัน.", "โชคชะตาของคุณจะดีขึ้นเรื่อย ๆ ควรใช้ความพยายามอย่างต่อเนื่อง.", "มีโอกาสดี ๆ เข้ามาในชีวิตอย่างไม่คาดฝัน ควรพร้อมที่จะคว้าโอกาสนั้นไว้.", "การงานของคุณจะมั่นคงและเติบโตอย่างต่อเนื่อง."]
         };
 
         function getRandomReading(readings) {
@@ -230,7 +184,6 @@
                     preview.innerHTML = `<p style="color:#aaa;">รอรูปภาพ...</p>`;
                     return;
                 }
-                
                 uploadedFile = file;
                 const reader = new FileReader();
                 reader.onload = function(evt) {
@@ -243,39 +196,54 @@
             }
         });
 
-        analyzeBtn.addEventListener('click', function() {
+        async function analyzePalm() {
             if (!uploadedFile) {
                 alert('กรุณาอัปโหลดรูปภาพก่อน');
                 return;
             }
 
-            // A more robust check for a "palm" image.
-            const fileName = uploadedFile.name.toLowerCase();
-            const fileType = uploadedFile.type;
+            const formData = new FormData();
+            formData.append('file', uploadedFile);
 
-            if (!fileType.startsWith('image/')) {
-                alert('กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น');
-                resultSection.classList.remove('show');
-                return;
-            }
-
-            if (!fileName.includes('palm') && !fileName.includes('hand')) {
-                alert('โปรดอัปโหลดรูปภาพฝ่ามือเท่านั้น กรุณาตั้งชื่อไฟล์ให้มีคำว่า "palm" หรือ "hand"');
-                resultSection.classList.remove('show');
-                return;
-            }
-
-            // Proceed with displaying the results
+            // Hide the previous results
             resultSection.classList.remove('show');
-            
-            setTimeout(() => {
-                resultSection.classList.add('show');
-                document.getElementById('lifeLine').innerText = getRandomReading(readings.life);
-                document.getElementById('headLine').innerText = getRandomReading(readings.head);
-                document.getElementById('heartLine').innerText = getRandomReading(readings.heart);
-                document.getElementById('fateLine').innerText = getRandomReading(readings.fate);
-            }, 500);
-        });
+
+            try {
+                // Send the image to the backend for analysis
+                const response = await fetch('/api/analyze-palm', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+
+                if (response.ok) {
+                    if (result.is_palm) {
+                        // The backend confirmed it's a palm, so show the reading
+                        setTimeout(() => {
+                            resultSection.classList.add('show');
+                            document.getElementById('lifeLine').innerText = getRandomReading(readings.life);
+                            document.getElementById('headLine').innerText = getRandomReading(readings.head);
+                            document.getElementById('heartLine').innerText = getRandomReading(readings.heart);
+                            document.getElementById('fateLine').innerText = getRandomReading(readings.fate);
+                        }, 500);
+                    } else {
+                        // The backend determined it's not a palm
+                        alert(result.message);
+                    }
+                } else {
+                    // Handle server errors
+                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
+                    console.error('Server error:', result.error);
+                }
+            } catch (error) {
+                // Handle network errors
+                alert('ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้');
+                console.error('Network error:', error);
+            }
+        }
+
+        analyzeBtn.addEventListener('click', analyzePalm);
     </script>
 </body>
 </html>
