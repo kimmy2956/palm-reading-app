@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ทำนายลายมือ</title>
+  <title>ทำนายลายมือ by คุณแอปเปิ้ล</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* ===== Reset & Base ===== */
     * { margin:0; padding:0; box-sizing:border-box; font-family:'Kanit', sans-serif; }
@@ -26,6 +29,7 @@
     .preview img { max-width:100%; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,0.2); }
 
     .analyze-btn { padding:12px 25px; background:#ff9800; color:white; font-weight:bold; border:none; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+    .notice-text { color: #d84315; margin-top: 10px; font-weight: bold; }
 
     /* ===== Result Section ===== */
     .result-section { margin-top:20px; display:grid; gap:15px; }
@@ -39,13 +43,8 @@
       to { text-shadow: 0 0 20px #ff5722; }
     }
 
-    /* ===== Manual Mode ===== */
-    .manual-section { margin-top:30px; text-align:center; }
-    .manual-section select, .manual-section button { padding:12px; margin-top:10px; border-radius:10px; border:1px solid #ccc; }
-    .manual-section button { background:#ff9800; color:white; font-weight:bold; border:none; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
-
-    #manualResult { margin-top:15px; background:#fff3e0; padding:15px; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1); font-size:0.95rem; }
-
+    /* ===== Manual Mode (Removed from HTML for cleaner code) ===== */
+    
     /* ===== Footer ===== */
     footer { text-align:center; padding:15px; background:#ffe0b2; color:#5d4037; border-top-left-radius:20px; border-top-right-radius:20px; margin-top:30px; }
 
@@ -63,34 +62,21 @@
   </header>
 
   <main>
-    <!-- Upload Section -->
     <section class="upload-section">
       <h2>อัปโหลดหรือถ่ายรูปฝ่ามือ</h2>
+      <p class="notice-text">
+        **หมายเหตุ:** โปรแกรมนี้ใช้เพื่อความบันเทิงเท่านั้น และไม่ได้ทำการวิเคราะห์ลายมือจริง ผลลัพธ์ที่แสดงจะถูกสุ่มขึ้นมาใหม่ทุกครั้ง.
+      </p>
       <input type="file" id="palmInput" accept="image/*">
       <div class="preview" id="preview"></div>
       <button class="analyze-btn" onclick="analyzePalmAI()">วิเคราะห์เส้นลายมือ</button>
     </section>
 
-    <!-- Result Section -->
     <section class="result-section" id="resultSection" style="display:none;">
       <div class="card" id="lifeCard"><h3>เส้นชีวิต</h3><p id="lifeLine"></p></div>
       <div class="card" id="headCard"><h3>เส้นสมอง</h3><p id="headLine"></p></div>
       <div class="card" id="heartCard"><h3>เส้นหัวใจ</h3><p id="heartLine"></p></div>
       <div class="card" id="fateCard"><h3>เส้นวาสนา</h3><p id="fateLine"></p></div>
-    </section>
-
-    <!-- Manual Mode -->
-    <section class="manual-section">
-      <h2>โหมดเลือกอ่านเอง</h2>
-      <select id="manualSelect">
-        <option value="">-- เลือกเส้นมือ --</option>
-        <option value="life">เส้นชีวิต</option>
-        <option value="head">เส้นสมอง</option>
-        <option value="heart">เส้นหัวใจ</option>
-        <option value="fate">เส้นวาสนา</option>
-      </select>
-      <button onclick="manualRead()">อ่านเส้นที่เลือก</button>
-      <div id="manualResult"></div>
     </section>
   </main>
 
@@ -99,59 +85,69 @@
   </footer>
 
   <script>
-    const preview = document.getElementById('preview');
     const palmInput = document.getElementById('palmInput');
+    const preview = document.getElementById('preview');
+    const resultSection = document.getElementById('resultSection');
 
-    // Preview uploaded image
-    palmInput.addEventListener('change', function(e){
+    // ชุดคำทำนายแบบสุ่มสำหรับแต่ละเส้น
+    const lifeReadings = [
+      "คุณมีสุขภาพแข็งแรงและพลังชีวิตสูงมาก ควรดูแลการพักผ่อนและออกกำลังกายสม่ำเสมอ.",
+      "เส้นชีวิตของคุณยาวและชัดเจน บ่งบอกถึงอายุที่ยืนยาวและมีความสุขในบั้นปลาย.",
+      "ชีวิตของคุณเต็มไปด้วยพลังบวกและแรงบันดาลใจ ควรแบ่งปันสิ่งดีๆ ให้ผู้อื่น."
+    ];
+
+    const headReadings = [
+      "คุณมีความคิดสร้างสรรค์และมีสติปัญญาเป็นเลิศ เหมาะกับงานที่ต้องใช้ความคิด.",
+      "การตัดสินใจของคุณรอบคอบและแม่นยำ ควรเชื่อมั่นในตัวเองมากขึ้น.",
+      "คุณมีความสามารถในการเรียนรู้สิ่งใหม่ๆ ได้อย่างรวดเร็ว ควรเปิดรับความรู้ใหม่ๆ อยู่เสมอ."
+    ];
+
+    const heartReadings = [
+      "คุณมีความรักที่มั่นคงและจริงใจ ควรให้ความสำคัญกับความสัมพันธ์รอบตัว.",
+      "คุณเป็นคนอ่อนโยนและเห็นอกเห็นใจผู้อื่น ควรใช้คุณสมบัตินี้เพื่อช่วยเหลือคนอื่น.",
+      "ความรักของคุณกำลังจะเบ่งบาน ควรเปิดใจรับโอกาสใหม่ๆ ที่กำลังจะเข้ามา."
+    ];
+
+    const fateReadings = [
+      "คุณมีวาสนาในหน้าที่การงานและจะประสบความสำเร็จจากความขยัน.",
+      "โชคชะตาของคุณจะดีขึ้นเรื่อยๆ ควรใช้ความพยายามอย่างต่อเนื่อง.",
+      "คุณมีโอกาสดีๆ เข้ามาในชีวิตอย่างไม่คาดฝัน ควรพร้อมที่จะคว้าโอกาสนั้นไว้."
+    ];
+
+    // ฟังก์ชันสำหรับสุ่มเลือกคำทำนายจากอาร์เรย์
+    function getRandomReading(readings) {
+      const randomIndex = Math.floor(Math.random() * readings.length);
+      return readings[randomIndex];
+    }
+
+    // Event listener สำหรับการแสดงภาพตัวอย่าง
+    palmInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
-      if(file){
+      if (file) {
         const reader = new FileReader();
-        reader.onload = function(evt){
+        reader.onload = function(evt) {
           preview.innerHTML = `<img src="${evt.target.result}" alt="Palm Image">`;
         }
         reader.readAsDataURL(file);
       }
     });
 
-    // ===== AI Mock Function with Life Advice =====
-    function analyzePalmAI(){
-      if(!palmInput.files[0]){
+    // ฟังก์ชันหลักสำหรับการวิเคราะห์ลายมือ
+    function analyzePalmAI() {
+      // ตรวจสอบว่ามีการอัปโหลดไฟล์แล้วหรือไม่
+      if (!palmInput.files[0]) {
         alert('กรุณาอัปโหลดรูปฝ่ามือก่อน');
         return;
       }
+      
+      // แสดงส่วนผลลัพธ์
+      resultSection.style.display = 'grid';
 
-      document.getElementById('resultSection').style.display = 'grid';
-
-      // Mock AI ผลลัพธ์ + คำแนะนำเชิงบวก
-      const lifeLineResult = "คุณมีสุขภาพแข็งแรง พลังชีวิตสูง แนะนำให้ดูแลการพักผ่อนและออกกำลังกายสม่ำเสมอ เพื่อรักษาพลังบวกในชีวิตประจำวัน";
-      const headLineResult = "คุณมีความคิดรอบคอบและการตัดสินใจดี แนะนำให้ตั้งเป้าหมายชัดเจน และวางแผนการทำงานอย่างเป็นขั้นตอนเพื่อประสิทธิภาพสูงสุด";
-      const heartLineResult = "คุณมีความรักมั่นคงและสัมพันธ์ราบรื่น แนะนำให้สื่อสารความรู้สึกกับคนใกล้ชิดและใช้เวลาใกล้ชิดกับครอบครัวและคนรัก";
-      const fateLineResult = "คุณมีเส้นวาสนาและการงานที่มั่นคง แนะนำให้ขยันและรักษาความซื่อสัตย์ พร้อมเปิดใจเรียนรู้สิ่งใหม่ ๆ เพื่อความก้าวหน้า";
-
-      document.getElementById('lifeLine').innerText = lifeLineResult;
-      document.getElementById('headLine').innerText = headLineResult;
-      document.getElementById('heartLine').innerText = heartLineResult;
-      document.getElementById('fateLine').innerText = fateLineResult;
-    }
-
-    // Manual Mode
-    function manualRead(){
-      const choice = document.getElementById('manualSelect').value;
-      const manualResult = document.getElementById('manualResult');
-
-      const readings = {
-        life: "เส้นชีวิต: สุขภาพแข็งแรง พลังชีวิตสูง แนะนำให้ออกกำลังกายสม่ำเสมอและพักผ่อนให้เพียงพอ",
-        head: "เส้นสมอง: การคิดรอบคอบและการตัดสินใจดี แนะนำให้วางแผนอย่างเป็นขั้นตอนและตั้งเป้าหมายชัดเจน",
-        heart: "เส้นหัวใจ: ความรักมั่นคง แนะนำให้สื่อสารความรู้สึกกับคนรักและครอบครัว ใช้เวลาคุณภาพด้วยกัน",
-        fate: "เส้นวาสนา: การงานมั่นคง โชคชะตาดี แนะนำให้ขยันและรักษาความซื่อสัตย์ พร้อมเปิดใจเรียนรู้สิ่งใหม่ ๆ"
-      };
-
-      if(choice && readings[choice]){
-        manualResult.innerText = readings[choice];
-      } else {
-        manualResult.innerText = 'กรุณาเลือกเส้นมือที่ต้องการอ่าน';
-      }
+      // สุ่มเลือกคำทำนายและแสดงผล
+      document.getElementById('lifeLine').innerText = getRandomReading(lifeReadings);
+      document.getElementById('headLine').innerText = getRandomReading(headReadings);
+      document.getElementById('heartLine').innerText = getRandomReading(heartReadings);
+      document.getElementById('fateLine').innerText = getRandomReading(fateReadings);
     }
   </script>
 </body>
