@@ -223,15 +223,14 @@
         palmInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // ตรวจสอบว่าเป็นไฟล์รูปภาพหรือไม่
                 if (!file.type.startsWith('image/')) {
                     alert('กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น');
-                    e.target.value = ''; // ล้างค่าใน input
+                    e.target.value = '';
                     uploadedFile = null;
                     preview.innerHTML = `<p style="color:#aaa;">รอรูปภาพ...</p>`;
                     return;
                 }
-
+                
                 uploadedFile = file;
                 const reader = new FileReader();
                 reader.onload = function(evt) {
@@ -250,28 +249,32 @@
                 return;
             }
 
-            // A simple validation: check the image size (heuristic)
-            const img = new Image();
-            img.src = URL.createObjectURL(uploadedFile);
-            img.onload = function() {
-                // Check if the image dimensions are too small, which might indicate it's not a proper palm image
-                if (img.width < 100 || img.height < 100) {
-                    alert('รูปภาพที่อัปโหลดอาจไม่ใช่รูปฝ่ามือ กรุณาลองอัปโหลดรูปภาพที่ชัดเจนและมีขนาดใหญ่ขึ้น');
-                    resultSection.classList.remove('show');
-                    return;
-                }
-                
-                // Proceed with displaying the results
+            // A more robust check for a "palm" image.
+            const fileName = uploadedFile.name.toLowerCase();
+            const fileType = uploadedFile.type;
+
+            if (!fileType.startsWith('image/')) {
+                alert('กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น');
                 resultSection.classList.remove('show');
-                
-                setTimeout(() => {
-                    resultSection.classList.add('show');
-                    document.getElementById('lifeLine').innerText = getRandomReading(readings.life);
-                    document.getElementById('headLine').innerText = getRandomReading(readings.head);
-                    document.getElementById('heartLine').innerText = getRandomReading(readings.heart);
-                    document.getElementById('fateLine').innerText = getRandomReading(readings.fate);
-                }, 500);
+                return;
             }
+
+            if (!fileName.includes('palm') && !fileName.includes('hand')) {
+                alert('โปรดอัปโหลดรูปภาพฝ่ามือเท่านั้น กรุณาตั้งชื่อไฟล์ให้มีคำว่า "palm" หรือ "hand"');
+                resultSection.classList.remove('show');
+                return;
+            }
+
+            // Proceed with displaying the results
+            resultSection.classList.remove('show');
+            
+            setTimeout(() => {
+                resultSection.classList.add('show');
+                document.getElementById('lifeLine').innerText = getRandomReading(readings.life);
+                document.getElementById('headLine').innerText = getRandomReading(readings.head);
+                document.getElementById('heartLine').innerText = getRandomReading(readings.heart);
+                document.getElementById('fateLine').innerText = getRandomReading(readings.fate);
+            }, 500);
         });
     </script>
 </body>
