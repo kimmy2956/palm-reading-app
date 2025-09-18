@@ -187,7 +187,7 @@
     </footer>
 
     <script type="module">
-        import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.14.1/dist/index.js";
+        import { GoogleGenerativeAI } from "https://cdn.jsdelivr.net/npm/@google/generative-ai@0.14.1/dist/generative-ai.js";
 
         // IMPORTANT: Your actual API key is placed here.
         // **Warning: This key is exposed in the front-end. For production, use a secure back-end.**
@@ -218,76 +218,4 @@
         }
 
         // Event listener for file input changes
-        palmInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                uploadedFile = file;
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    preview.innerHTML = `<img src="${evt.target.result}" alt="Uploaded Palm Image">`;
-                }
-                reader.readAsDataURL(file);
-                // Clear previous status and results
-                statusText.innerText = '';
-                resultSection.classList.remove('show');
-            } else {
-                alert('กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น');
-                e.target.value = '';
-                uploadedFile = null;
-                preview.innerHTML = `<p style="color:#aaa;">รอรูปภาพ...</p>`;
-            }
-        });
-
-        // Event listener for the analyze button click
-        analyzeBtn.addEventListener('click', async function() {
-            if (!uploadedFile) {
-                alert('กรุณาอัปโหลดรูปภาพก่อน');
-                return;
-            }
-
-            // Set UI to loading state
-            analyzeBtn.disabled = true;
-            analyzeBtn.innerText = 'กำลังวิเคราะห์...';
-            statusText.innerText = 'กำลังส่งข้อมูลไปที่ Gemini...';
-            
-            try {
-                const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-                const imagePart = await fileToGenerativePart(uploadedFile);
-                
-                const prompt = `
-                    จากรูปภาพฝ่ามือนี้ ทำนายดวงชะตาโดยอิงจากศาสตร์ลายมือ.
-                    วิเคราะห์ 4 เส้นหลัก: **เส้นชีวิต**, **เส้นสมอง**, **เส้นหัวใจ**, และ **เส้นวาสนา**.
-                    แต่ละเส้นให้เขียนคำทำนายเชิงบวกและความยาวพอเหมาะ.
-                    ตอบเป็นภาษาไทยเท่านั้น และห้ามวิเคราะห์ข้อมูลอื่น ๆ ที่ไม่เกี่ยวข้อง.
-                    ตอบโดยจัดรูปแบบหัวข้อให้ชัดเจนด้วยเครื่องหมาย ** ตามตัวอย่าง.
-                `;
-                
-                const result = await model.generateContent([prompt, imagePart]);
-                const responseText = await result.response.text();
-                
-                // Use a more robust regex to parse the response text
-                const lifeLineMatch = responseText.match(/\*\*เส้นชีวิต\*\*(.*?)(?=\*\*เส้นสมอง\*\*|\*\*เส้นหัวใจ\*\*|\*\*เส้นวาสนา\*\*|$)/s);
-                const headLineMatch = responseText.match(/\*\*เส้นสมอง\*\*(.*?)(?=\*\*เส้นหัวใจ\*\*|\*\*เส้นวาสนา\*\*|$)/s);
-                const heartLineMatch = responseText.match(/\*\*เส้นหัวใจ\*\*(.*?)(?=\*\*เส้นวาสนา\*\*|$)/s);
-                const fateLineMatch = responseText.match(/\*\*เส้นวาสนา\*\*(.*)/s);
-
-                document.getElementById('lifeLine').innerText = lifeLineMatch ? lifeLineMatch[1].trim() : 'ไม่พบการวิเคราะห์เส้นชีวิต';
-                document.getElementById('headLine').innerText = headLineMatch ? headLineMatch[1].trim() : 'ไม่พบการวิเคราะห์เส้นสมอง';
-                document.getElementById('heartLine').innerText = heartLineMatch ? heartLineMatch[1].trim() : 'ไม่พบการวิเคราะห์เส้นหัวใจ';
-                document.getElementById('fateLine').innerText = fateLineMatch ? fateLineMatch[1].trim() : 'ไม่พบการวิเคราะห์เส้นวาสนา';
-                
-                statusText.innerText = 'วิเคราะห์เสร็จสมบูรณ์';
-                resultSection.classList.add('show');
-
-            } catch (error) {
-                console.error("Error calling Gemini API:", error);
-                statusText.innerText = 'เกิดข้อผิดพลาดในการทำนาย. โปรดลองใหม่อีกครั้ง';
-                alert('เกิดข้อผิดพลาด: โปรดตรวจสอบคีย์ API ของคุณหรือลองอีกครั้งในภายหลัง');
-            } finally {
-                analyzeBtn.disabled = false;
-                analyzeBtn.innerText = 'วิเคราะห์เส้นลายมือ';
-            }
-        });
-    </script>
-</body>
-</html>
+        palmInput.addEventListener('change', function(e)
